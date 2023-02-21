@@ -35,7 +35,8 @@ import java.util.concurrent.TimeUnit
 
 @Composable
 fun Details() {
-    Surface(color = Common.navyBlue,
+    Surface(
+        color = Common.navyBlue,
         modifier = Modifier
             .fillMaxSize()
             .background(Common.navyBlue)
@@ -56,8 +57,16 @@ fun Details() {
 
 @Composable
 fun CrouselImage() {
-//   var isVisi1ble by remember {
- //       mutableStateOf(false) }
+    var textState by remember {
+        mutableStateOf("")
+    }
+
+    LaunchedEffect(key1 = 1 ){
+        timer(updateTimeText = {
+            textState = it.toString()
+        })
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -65,10 +74,11 @@ fun CrouselImage() {
             .clip(RoundedCornerShape(10.dp)),
     )
     {
-        Image(modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
-            .padding(),
+        Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .padding(),
             painter = painterResource(id = R.drawable.crouselimage),
             contentDescription = null,
             contentScale = ContentScale.Crop
@@ -81,7 +91,8 @@ fun CrouselImage() {
             contentAlignment = Alignment.Center,
         ) {
 
-            Text(text = "THE GAME WILL START IN ",
+            Text(
+                text = "THE GAME WILL START IN $textState",
                 modifier = Modifier
                     .height(22.dp)
                     .width(300.dp),
@@ -91,104 +102,122 @@ fun CrouselImage() {
             )
         }
 
+    }
+}
+
+fun timer(updateTimeText : (Long)-> Unit){
+    val timer = object: CountDownTimer(60000, 1000) {
+        override fun onTick(millisUntilFinished: Long) {
+            val sec = (millisUntilFinished/1000) % 60
+            updateTimeText(sec)
+        }
+        override fun onFinish() {
         }
     }
+    timer.start()
 
+}
 
-
-
-
-    @Composable
-    fun Button() {
-        Row(modifier = Modifier
+@Composable
+fun Button() {
+    Row(
+        modifier = Modifier
             .fillMaxWidth()
             .padding(top = 10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        androidx.compose.material.Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier.requiredWidth(180.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Common.lightGrey
+            )
         ) {
-            androidx.compose.material.Button(
-                onClick = { /*TODO*/ },
-                modifier = Modifier.requiredWidth(180.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Common.lightGrey
-                )
-            ) {
-                Icon(painter = painterResource(id = R.drawable.button_text___icon),
-                    tint = Color.White,
-                    contentDescription = null)
-            }
-            androidx.compose.material.Button(
-                onClick = { /*TODO*/ },
-                modifier = Modifier.requiredWidth(180.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Common.lightGrey
-                )) {
-                Icon(painter = painterResource(id = R.drawable.button_text___icon1),
-                    tint = Color.White,
-                    contentDescription = null)
-            }
+            Icon(
+                painter = painterResource(id = R.drawable.button_text___icon),
+                tint = Color.White,
+                contentDescription = null
+            )
+        }
+        androidx.compose.material.Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier.requiredWidth(180.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Common.lightGrey
+            )
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.button_text___icon1),
+                tint = Color.White,
+                contentDescription = null
+            )
         }
     }
+}
 
-    @OptIn(ExperimentalPagerApi::class)
-    @Composable
-    fun TabView() {
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun TabView() {
 
-        val pagerState = rememberPagerState()
-        val currentPage = pagerState.currentPage
-        val scope = rememberCoroutineScope()
+    val pagerState = rememberPagerState()
+    val currentPage = pagerState.currentPage
+    val scope = rememberCoroutineScope()
 
-        Column(modifier = Modifier.fillMaxSize()
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        TabRow(
+            selectedTabIndex = currentPage,
+            backgroundColor = Common.navyBlue,
+            contentColor = Color.White
+
         ) {
-            TabRow(selectedTabIndex = currentPage,
-                backgroundColor = Common.navyBlue,
-                contentColor = Color.White
-
-            ) {
-                tabList.forEachIndexed { index, tabData ->
-                    Tab(selected = currentPage == index, onClick = {
+            tabList.forEachIndexed { index, tabData ->
+                Tab(
+                    selected = currentPage == index, onClick = {
                         //cant directly pass animated scroll we put in scope
                         scope.launch {
                             pagerState.animateScrollToPage(index)
                         }
                     },
-                        modifier = Modifier
-                            .padding(20.dp)
-                    ) {
-                        Text(text = tabList[index].tab)
-                    }
+                    modifier = Modifier
+                        .padding(20.dp)
+                ) {
+                    Text(text = tabList[index].tab)
                 }
             }
-            HorizontalPager(count = tabList.size, state = pagerState) { index ->
-                Text(text = tabList[index].des)
-            }
-
+        }
+        HorizontalPager(count = tabList.size, state = pagerState) { index ->
+            Text(text = tabList[index].des)
         }
 
     }
 
-    data class TabData(
-        val tab: String,
-        val des: String,
-    )
+}
 
-    val tabList = listOf(
-        TabData(
-            "Stats",
-            "This is Stats"
-        ),
-        TabData(
-            "Insights",
-            "This is Insight"
-        ),
-        TabData(
-            "Related",
-            "This is Related"
-        ),
-        TabData(
-            "Bet+",
-            "This is Bet"
-        ),
-    )
+data class TabData(
+    val tab: String,
+    val des: String,
+)
+
+val tabList = listOf(
+    TabData(
+        "Stats",
+        "This is Stats"
+    ),
+    TabData(
+        "Insights",
+        "This is Insight"
+    ),
+    TabData(
+        "Related",
+        "This is Related"
+    ),
+    TabData(
+        "Bet+",
+        "This is Bet"
+    ),
+)
 
 
 //Live Game
@@ -202,11 +231,12 @@ fun CrouselImage2() {
             .padding(),
     )
     {
-        Image(modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
-            .padding()
-            .clip(RoundedCornerShape(10.dp)),
+        Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .padding()
+                .clip(RoundedCornerShape(10.dp)),
             painter = painterResource(id = R.drawable.crouselimage),
             contentDescription = null,
             contentScale = ContentScale.Crop
@@ -218,7 +248,6 @@ fun CrouselImage2() {
                 .fillMaxWidth(),
             contentAlignment = Alignment.Center,
         ) {
-
 
 
         }
