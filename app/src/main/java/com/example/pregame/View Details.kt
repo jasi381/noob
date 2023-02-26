@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.CountDownTimer
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,7 +48,21 @@ fun Details() {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            CrouselImage()
+            var textState by rememberSaveable() {
+                mutableStateOf("")
+            }
+
+            LaunchedEffect(key1 = 1 ){
+                timer(updateTimeText = {
+                    textState = it.toString()
+                })
+            }
+
+            if(textState.equals("0")){
+                CrouselImage2()
+            }else{
+                CrouselImage(textState)
+            }
             Button()
             TabView()
         }
@@ -56,16 +72,7 @@ fun Details() {
 }
 
 @Composable
-fun CrouselImage() {
-    var textState by remember {
-        mutableStateOf("")
-    }
-
-    LaunchedEffect(key1 = 1 ){
-        timer(updateTimeText = {
-            textState = it.toString()
-        })
-    }
+fun CrouselImage(textState : String) {
 
     Column(
         modifier = Modifier
@@ -237,13 +244,13 @@ fun CrouselImage2() {
                 .height(200.dp)
                 .padding()
                 .clip(RoundedCornerShape(10.dp)),
-            painter = painterResource(id = R.drawable.crouselimage),
+            painter = painterResource(id = R.drawable.ic_launcher_background),
             contentDescription = null,
             contentScale = ContentScale.Crop
         )
         Box(
             modifier = Modifier
-                .background(Common.navyBlue)
+                .background(Common.lightGrey)
                 .height(85.dp)
                 .fillMaxWidth(),
             contentAlignment = Alignment.Center,
