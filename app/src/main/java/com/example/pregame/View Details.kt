@@ -63,7 +63,7 @@ fun Details() {
             }else{
                 CrouselImage(textState)
             }
-            Button()
+
             TabView()
         }
 
@@ -99,7 +99,7 @@ fun CrouselImage(textState : String) {
         ) {
 
             Text(
-                text = "THE GAME WILL START IN $textState",
+                text = "THE GAME WILL START IN 00:00:0$textState",
                 modifier = Modifier
                     .height(22.dp)
                     .width(300.dp),
@@ -108,12 +108,13 @@ fun CrouselImage(textState : String) {
                 color = Color.White
             )
         }
+        ButtonUi()
 
     }
 }
 
 fun timer(updateTimeText : (Long)-> Unit){
-    val timer = object: CountDownTimer(60000, 1000) {
+    val timer = object: CountDownTimer(10000, 1000) {
         override fun onTick(millisUntilFinished: Long) {
             val sec = (millisUntilFinished/1000) % 60
             updateTimeText(sec)
@@ -126,16 +127,19 @@ fun timer(updateTimeText : (Long)-> Unit){
 }
 
 @Composable
-fun Button() {
+fun ButtonUi() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         androidx.compose.material.Button(
             onClick = { /*TODO*/ },
-            modifier = Modifier.requiredWidth(180.dp),
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 10.dp),
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Common.lightGrey
             )
@@ -148,7 +152,9 @@ fun Button() {
         }
         androidx.compose.material.Button(
             onClick = { /*TODO*/ },
-            modifier = Modifier.requiredWidth(180.dp),
+            modifier = Modifier
+                .weight(1f)
+                .padding(10.dp),
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Common.lightGrey
             )
@@ -177,8 +183,10 @@ fun TabView() {
             selectedTabIndex = currentPage,
             backgroundColor = Common.navyBlue,
             contentColor = Color.White
+        )
 
-        ) {
+
+         {
             tabList.forEachIndexed { index, tabData ->
                 Tab(
                     selected = currentPage == index, onClick = {
@@ -188,7 +196,7 @@ fun TabView() {
                         }
                     },
                     modifier = Modifier
-                        .padding(20.dp)
+                        .padding(10.dp)
                 ) {
                     Text(text = tabList[index].tab)
                 }
@@ -230,7 +238,7 @@ val tabList = listOf(
 //Live Game
 @Composable
 fun CrouselImage2() {
-//   var isVisi1ble by remember {
+//   var isVisible by remember {
     //       mutableStateOf(false) }
     Column(
         modifier = Modifier
@@ -244,16 +252,17 @@ fun CrouselImage2() {
                 .height(200.dp)
                 .padding()
                 .clip(RoundedCornerShape(10.dp)),
-            painter = painterResource(id = R.drawable.ic_launcher_background),
+            painter = painterResource(id = R.drawable.crouselimage),
             contentDescription = null,
             contentScale = ContentScale.Crop
         )
         Box(
             modifier = Modifier
-                .background(Common.lightGrey)
-                .height(85.dp)
+                .background(Common.navyBlue)
+                .height(145.dp)
                 .fillMaxWidth(),
             contentAlignment = Alignment.Center,
+
         ) {
 
 
