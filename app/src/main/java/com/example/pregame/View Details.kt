@@ -81,15 +81,25 @@ fun CrouselImage(textState : String) {
             .clip(RoundedCornerShape(10.dp)),
     )
     {
-        Image(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding(),
-            painter = painterResource(id = R.drawable.crouselimage),
-            contentDescription = null,
-            contentScale = ContentScale.Crop
-        )
+        Box() {
+            Image(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .padding(),
+                painter = painterResource(id = R.drawable.crouselimage),
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
+
+            Image(modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(13.dp)
+                .size(50.dp),
+                painter = painterResource(id = R.drawable.ic_launcher_background),
+                contentDescription = null )
+        }
+
         Box(
             modifier = Modifier
                 .background(Color.Red)
@@ -196,13 +206,14 @@ fun TabView() {
                         }
                     },
                     modifier = Modifier
-                        .padding(10.dp)
+                        .padding(10.dp),
                 ) {
                     Text(text = tabList[index].tab)
                 }
             }
         }
-        HorizontalPager(count = tabList.size, state = pagerState) { index ->
+        HorizontalPager(count = tabList.size, state = pagerState
+        ) { index ->
             Text(text = tabList[index].des)
         }
 
@@ -246,16 +257,24 @@ fun CrouselImage2() {
             .padding(),
     )
     {
-        Image(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding()
-                .clip(RoundedCornerShape(10.dp)),
-            painter = painterResource(id = R.drawable.crouselimage),
-            contentDescription = null,
-            contentScale = ContentScale.Crop
-        )
+        Box() {
+            Image(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .padding(),
+                painter = painterResource(id = R.drawable.crouselimage),
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
+
+            Image(modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(13.dp)
+                .size(50.dp),
+                painter = painterResource(id = R.drawable.ic_launcher_background),
+                contentDescription = null )
+        }
         Box(
             modifier = Modifier
                 .background(Common.navyBlue)
