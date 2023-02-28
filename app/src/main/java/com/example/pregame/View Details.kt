@@ -9,6 +9,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.*
@@ -94,8 +95,9 @@ fun CrouselImage(textState : String) {
 
             Image(modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(13.dp)
-                .size(50.dp),
+                .padding(11.dp)
+                .size(50.dp)
+                .clip(RoundedCornerShape(10.dp)),
                 painter = painterResource(id = R.drawable.ic_launcher_background),
                 contentDescription = null )
         }
@@ -104,7 +106,9 @@ fun CrouselImage(textState : String) {
             modifier = Modifier
                 .background(Color.Red)
                 .height(85.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp))
+                .padding(10.dp),
             contentAlignment = Alignment.Center,
         ) {
 
@@ -149,7 +153,8 @@ fun ButtonUi() {
             onClick = { /*TODO*/ },
             modifier = Modifier
                 .weight(1f)
-                .padding(end = 10.dp),
+                .padding(end = 10.dp)
+                .clip(RoundedCornerShape(10.dp)),
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Common.lightGrey
             )
@@ -164,7 +169,8 @@ fun ButtonUi() {
             onClick = { /*TODO*/ },
             modifier = Modifier
                 .weight(1f)
-                .padding(10.dp),
+                .padding(10.dp)
+                .clip(RoundedCornerShape(11.dp)),
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Common.lightGrey
             )
@@ -178,72 +184,6 @@ fun ButtonUi() {
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
-@Composable
-fun TabView() {
-
-    val pagerState = rememberPagerState()
-    val currentPage = pagerState.currentPage
-    val scope = rememberCoroutineScope()
-
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        TabRow(
-            selectedTabIndex = currentPage,
-            backgroundColor = Common.navyBlue,
-            contentColor = Color.White
-        )
-
-
-         {
-            tabList.forEachIndexed { index, tabData ->
-                Tab(
-                    selected = currentPage == index, onClick = {
-                        //cant directly pass animated scroll we put in scope
-                        scope.launch {
-                            pagerState.animateScrollToPage(index)
-                        }
-                    },
-                    modifier = Modifier
-                        .padding(10.dp),
-                ) {
-                    Text(text = tabList[index].tab)
-                }
-            }
-        }
-        HorizontalPager(count = tabList.size, state = pagerState
-        ) { index ->
-            Text(text = tabList[index].des)
-        }
-
-    }
-
-}
-
-data class TabData(
-    val tab: String,
-    val des: String,
-)
-
-val tabList = listOf(
-    TabData(
-        "Stats",
-        "This is Stats"
-    ),
-    TabData(
-        "Insights",
-        "This is Insight"
-    ),
-    TabData(
-        "Related",
-        "This is Related"
-    ),
-    TabData(
-        "Bet+",
-        "This is Bet"
-    ),
-)
 
 
 //Live Game
@@ -257,12 +197,14 @@ fun CrouselImage2() {
             .padding(),
     )
     {
-        Box() {
+        Box(
+           ) {
             Image(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
-                    .padding(),
+                    .padding()
+                    .clip(RoundedCornerShape(10.dp)),
                 painter = painterResource(id = R.drawable.crouselimage),
                 contentDescription = null,
                 contentScale = ContentScale.Crop
@@ -270,8 +212,10 @@ fun CrouselImage2() {
 
             Image(modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(13.dp)
-                .size(50.dp),
+                .padding(11.dp)
+                .size(50.dp)
+                .clip(RoundedCornerShape(10.dp)),
+
                 painter = painterResource(id = R.drawable.ic_launcher_background),
                 contentDescription = null )
         }
