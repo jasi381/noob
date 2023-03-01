@@ -35,9 +35,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Timer
 import java.util.concurrent.TimeUnit
+import kotlin.math.log
 
 @Composable
-fun Details() {
+fun Details(viewModel: MainViewModel) {
     Surface(
         color = Common.navyBlue,
         modifier = Modifier
@@ -49,27 +50,31 @@ fun Details() {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            var textState by rememberSaveable() {
-                mutableStateOf("")
-            }
+
 
             LaunchedEffect(key1 = 1 ){
                 timer(updateTimeText = {
-                    textState = it.toString()
+                    viewModel.screenChanged(it.toString())
                 })
             }
-
-            if(textState.equals("0")){
-                CrouselImage2()
-            }else{
-                CrouselImage(textState)
-            }
-
-            TabView()
+            CarouselData(viewModel = viewModel)
         }
 
     }
 
+}
+
+@Composable
+fun CarouselData(viewModel: MainViewModel){
+    val screenChange = viewModel.timerState.collectAsState()
+
+    if(screenChange.value.equals("0")){
+        CrouselImage2()
+    }else{
+        CrouselImage(screenChange.value)
+    }
+
+    TabView()
 }
 
 @Composable
@@ -104,10 +109,11 @@ fun CrouselImage(textState : String) {
 
         Box(
             modifier = Modifier
+                .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp))
                 .background(Color.Red)
                 .height(85.dp)
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp))
+
                 .padding(10.dp),
             contentAlignment = Alignment.Center,
         ) {
