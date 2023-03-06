@@ -74,7 +74,7 @@ fun CarouselData(viewModel: MainViewModel){
         CrouselImage(screenChange.value)
     }
 
-    TabView()
+    demo()
 }
 
 @Composable
